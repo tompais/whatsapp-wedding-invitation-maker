@@ -54,6 +54,9 @@ interface RawGuestRow {
 export async function findUnconfirmedGuestsWithPhone(): Promise<
   GuestWithGroup[]
 > {
+  // Nota: se usa !fk_confirmations_guest para desambiguar el FK en PostgREST.
+  // La tabla confirmations tiene dos FKs a guests: guest_id y confirmed_by_id.
+  // Sin el hint, Supabase lanza "more than one relationship found".
   const { data, error } = await supabase
     .from("guests")
     .select(
@@ -71,7 +74,7 @@ export async function findUnconfirmedGuestsWithPhone(): Promise<
           last_name
         )
       ),
-      confirmations (id)
+      confirmations!fk_confirmations_guest (id)
     `
     )
     .not("phone", "is", null);
