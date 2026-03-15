@@ -15,6 +15,11 @@ import type { GuestWithGroup } from "./types";
 /** URL de la página web de confirmación */
 const WEDDING_URL = "https://www.labodadeangieytomi.com";
 
+/** Recordatorio del plazo de confirmación, reutilizable en cualquier plantilla */
+const CONFIRMATION_DEADLINE_REMINDER =
+  `⏳ Tenés *una semana* para confirmar tu asistencia. ` +
+  `Si no recibimos tu respuesta, entenderemos que no vas a poder acompañarnos. 🙏`;
+
 /**
  * Construye el mensaje personalizado de WhatsApp para un invitado.
  *
@@ -55,7 +60,7 @@ function buildCTA(code: string): string {
   return (
     `Para confirmar, entrá a 👉 *${WEDDING_URL}* e ingresá tu código personal:\n` +
     `🔑 *${code}*\n` +
-    `⏳ Tenés *una semana* para confirmar tu asistencia. Si no recibimos tu respuesta, entenderemos que no vas a poder acompañarnos. 🙏`
+    CONFIRMATION_DEADLINE_REMINDER
   );
 }
 
