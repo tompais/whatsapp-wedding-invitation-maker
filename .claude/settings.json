@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,subprocess\ntry:\n    d=json.load(sys.stdin)\nexcept Exception:\n    sys.exit(0)\nfp=d.get('file_path','')\nif fp.endswith('.ts'):\n    r=subprocess.run(['npm','run','lint'],capture_output=True,text=True)\n    out=(r.stdout+r.stderr).strip()\n    if out:\n        lines=out.split('\\n')\n        print('\\n'.join(lines[-8:]))\n    else:\n        print('Lint failed with no output')\n    sys.exit(r.returncode)\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,os\ntry:\n    d=json.load(sys.stdin)\nexcept Exception:\n    sys.exit(0)\nbasename=os.path.basename(d.get('file_path',''))\nif basename=='.env':\n    print('BLOQUEADO: no editar .env directamente. Usá .env.example como referencia.')\n    sys.exit(2)\nsys.exit(0)\""
+          }
+        ]
+      }
+    ]
+  }
+}
