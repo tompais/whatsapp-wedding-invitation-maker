@@ -66,9 +66,9 @@ function buildCTA(code: string): string {
 function buildGroupSection(guest: GuestWithGroup): string {
   if (guest.groupMembers.length > 0) {
     const membersList = guest.groupMembers
-      .map((m) => `${m.firstName} ${m.lastName}`)
-      .join(", ");
-    return `¡Ah, y también podés confirmar por los que se suman con vos!\n👥 _${membersList}_`;
+      .map((m) => `- _${m.firstName} ${m.lastName}_`)
+      .join("\n");
+    return `¡Ah, y también podés confirmar por los que se suman con vos!\n👥\n${membersList}`;
   }
 
   return `_Tu invitación es personal y exclusiva — ¡fue pensada especialmente para vos! 🥰_`;
