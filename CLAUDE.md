@@ -52,7 +52,7 @@ En cada PR que cambie arquitectura, comportamiento o convenciones:
 
 1. Actualizar `README.md` si cambia el uso o setup
 2. Actualizar `docs/ARCHITECTURE.md` si cambia la estructura de capas
-3. Crear `docs/plans/YYYY-MM-DD-<feature>.md` para cada nuevo diseño aprobado
+3. Crear `docs/plans/YYYY-MM-DD-<feature>.md` durante el diseño — son documentos de trabajo efímeros; eliminarlos una vez implementado (cuando `CLAUDE.md` y `docs/ARCHITECTURE.md` cubren las decisiones)
 4. Diagramas (si aportan valor) en `diagrams/` como `.mmd` (Mermaid) o `.puml` (PlantUML)
 5. Todo el código debe estar bien comentado — JSDoc en funciones públicas, comentarios inline donde la lógica no sea evidente
 
