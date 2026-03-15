@@ -2,7 +2,7 @@
   "name": "whatsapp-wedding-invitation-maker",
   "version": "1.0.0",
   "description": "Generador de links de invitación WhatsApp para la boda de Angie y Tomi",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "generate": "ts-node index.ts",
     "start": "ts-node index.ts"
