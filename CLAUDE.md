@@ -27,7 +27,7 @@ npm run format:check  # Verificar formato sin modificar
 
 ## Architecture
 
-Arquitectura en capas liviana. Detalles en [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Arquitectura en capas liviana. Detalles en [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
 ```
 index.ts                          → Entry point (carga .env, renderiza y escribe Markdown)
