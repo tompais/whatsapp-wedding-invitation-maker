@@ -1,11 +1,14 @@
 /**
- * Generador de links de WhatsApp Me.
+ * Generador de links de WhatsApp con mensaje pre-cargado.
  *
- * WhatsApp Me permite generar links que al hacer clic abren WhatsApp
- * con un número y un mensaje pre-cargado. Formato de la URL:
- *   https://wa.me/<número_internacional>?text=<mensaje_encodeado>
+ * Usa el endpoint `api.whatsapp.com/send` en lugar de `wa.me` porque este último
+ * tiene un bug conocido con emojis de 4 bytes UTF-8 (plano suplementario Unicode,
+ * ej: 💍 🎉 🥰): los renderiza como "??" en el textbox de WhatsApp al abrir el link.
+ * `api.whatsapp.com/send` decodifica correctamente el parámetro `text` en ambos
+ * encodings (percent-encoded y Unicode directo).
  *
- * Referencia: https://faq.whatsapp.com/5904980669557816
+ * Formato de la URL:
+ *   https://api.whatsapp.com/send?phone=<número_internacional>&text=<mensaje_encodeado>
  */
 
 /** Código de país de Argentina (+54) */
@@ -15,11 +18,11 @@ const ARGENTINA_COUNTRY_CODE = "54";
 const MIN_PHONE_DIGITS = 10;
 
 /**
- * Genera un link de WhatsApp Me para un número de teléfono argentino.
+ * Genera un link de WhatsApp con mensaje pre-cargado para un número argentino.
  *
  * @param rawPhone - Número en cualquier formato (con o sin código de país)
  * @param message - Texto del mensaje (se encodeará automáticamente con encodeURIComponent)
- * @returns URL completa de WhatsApp Me
+ * @returns URL completa de WhatsApp con mensaje pre-cargado
  * @throws Error si el número no tiene un formato reconocible
  */
 export function generateWhatsAppLink(
@@ -28,7 +31,7 @@ export function generateWhatsAppLink(
 ): string {
   const normalizedPhone = normalizeArgentinePhone(rawPhone);
   const encodedMessage = encodeURIComponent(message);
-  return `https://wa.me/${normalizedPhone}?text=${encodedMessage}`;
+  return `https://api.whatsapp.com/send?phone=${normalizedPhone}&text=${encodedMessage}`;
 }
 
 /**
