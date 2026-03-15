@@ -5,7 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "generate": "ts-node index.ts",
-    "start": "ts-node index.ts"
+    "start": "ts-node index.ts",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint --fix \"src/**/*.ts\"",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
+    "prepare": "husky"
   },
   "author": "Tomi & Angie",
   "license": "ISC",
@@ -16,7 +21,22 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.57.0"
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md}": [
+      "prettier --write"
+    ]
   }
 }

@@ -22,7 +22,10 @@ const MIN_PHONE_DIGITS = 10;
  * @returns URL completa de WhatsApp Me
  * @throws Error si el número no tiene un formato reconocible
  */
-export function generateWhatsAppLink(rawPhone: string, message: string): string {
+export function generateWhatsAppLink(
+  rawPhone: string,
+  message: string
+): string {
   const normalizedPhone = normalizeArgentinePhone(rawPhone);
   const encodedMessage = encodeURIComponent(message);
   return `https://wa.me/${normalizedPhone}?text=${encodedMessage}`;
