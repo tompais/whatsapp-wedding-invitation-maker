@@ -49,11 +49,13 @@ function buildIntro(firstName: string): string {
 
 /**
  * Llamado a la acción con el link y el código personal de confirmación.
+ * Incluye un recordatorio del plazo de una semana para confirmar.
  */
 function buildCTA(code: string): string {
   return (
     `Para confirmar, entrá a 👉 *${WEDDING_URL}* e ingresá tu código personal:\n` +
-    `🔑 *${code}*`
+    `🔑 *${code}*\n` +
+    `⏳ Tenés *una semana* para confirmar tu asistencia. Si no recibimos tu respuesta, entenderemos que no vas a poder acompañarnos. 🙏`
   );
 }
 
