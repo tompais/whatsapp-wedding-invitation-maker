@@ -1,6 +1,6 @@
 # 💍 WhatsApp Wedding Invitation Maker
 
-Generador de links de invitación WhatsApp para la boda de **Angie & Tomi** (Julio 2026).
+Generador de links de invitación de WhatsApp para la boda de **Angie & Tomi** (Julio 2026).
 
 Conecta con la base de datos Supabase de [www.labodadeangieytomi.com](https://www.labodadeangieytomi.com),
 obtiene todos los invitados con teléfono que aún no confirmaron asistencia,
