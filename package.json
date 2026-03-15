@@ -1,13 +1,42 @@
 {
   "name": "whatsapp-wedding-invitation-maker",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Generador de links de invitación WhatsApp para la boda de Angie y Tomi",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "ts-node index.ts",
+    "start": "ts-node index.ts",
+    "lint": "eslint \"src/**/*.ts\" \"index.ts\"",
+    "lint:fix": "eslint --fix \"src/**/*.ts\" \"index.ts\"",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
+    "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Tomi & Angie",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.57.0"
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md}": [
+      "prettier --write"
+    ]
+  }
 }

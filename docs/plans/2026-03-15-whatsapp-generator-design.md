@@ -27,13 +27,13 @@ Referencia: [wedding-invitation-ui](https://github.com/tompais/wedding-invitatio
 
 ## Stack Técnico
 
-| Tecnología | Rol |
-|---|---|
-| TypeScript | Lenguaje principal |
-| ts-node | Ejecuta TypeScript sin build step |
-| @supabase/supabase-js | Cliente oficial de Supabase |
-| dotenv | Carga de variables de entorno |
-| Node.js (CommonJS) | Runtime |
+| Tecnología            | Rol                               |
+| --------------------- | --------------------------------- |
+| TypeScript            | Lenguaje principal                |
+| ts-node               | Ejecuta TypeScript sin build step |
+| @supabase/supabase-js | Cliente oficial de Supabase       |
+| dotenv                | Carga de variables de entorno     |
+| Node.js (CommonJS)    | Runtime                           |
 
 Sin framework, sin bundler. Script puro de Node.js.
 
@@ -80,23 +80,23 @@ confirmations → guest_id (unique) -- si existe, el invitado ya confirmó
 
 ```ts
 interface GuestWithGroup {
-  id: string
-  firstName: string
-  lastName: string
-  phone: string          // siempre presente (filtrado en repositorio)
-  code: string
-  groupName?: string     // undefined si no pertenece a un grupo
-  groupMembers: GroupMember[]  // vacío si no tiene grupo
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string; // siempre presente (filtrado en repositorio)
+  code: string;
+  groupName?: string; // undefined si no pertenece a un grupo
+  groupMembers: GroupMember[]; // vacío si no tiene grupo
 }
 
 interface GroupMember {
-  firstName: string
-  lastName: string
+  firstName: string;
+  lastName: string;
 }
 
 enum OutputSection {
   FAMILY_GROUP = "family_group",
-  SOLO = "solo"
+  SOLO = "solo",
 }
 ```
 
@@ -144,6 +144,7 @@ _Tu invitación es personal y exclusiva — ¡fue pensada especialmente para vos
 ## Normalización de Teléfono (Argentina)
 
 El link de WhatsApp Me requiere el número en formato internacional sin `+`:
+
 - Prefijo de país: `54`
 - Eliminar `0` inicial si existe
 - Eliminar `15` de celular si existe (formato antiguo argentino)
@@ -168,15 +169,18 @@ _Generado el [fecha]. Total: X invitados._
 ## 👨‍👩‍👧 Grupos familiares
 
 ### PAISADAN
+
 - **Sergio Pais** — [Enviar invitación por WhatsApp](https://wa.me/...)
 - **Silvana Adán** — [Enviar invitación por WhatsApp](https://wa.me/...)
 
 ### VILASALGUEIRO
+
 - **Susana Vila** — [Enviar invitación por WhatsApp](https://wa.me/...)
 
 ---
 
 ## 🎲 Los-Sin-Grupo
+
 - **Paula Salgueiro** — [Enviar invitación por WhatsApp](https://wa.me/...)
 ```
 
@@ -184,12 +188,12 @@ _Generado el [fecha]. Total: X invitados._
 
 ## Manejo de Errores
 
-| Situación | Comportamiento |
-|---|---|
-| Variables de entorno faltantes | Error descriptivo al arranque, el script no corre |
-| Fallo de conexión a Supabase | Error con mensaje claro (no stacktrace crudo) |
-| Sin invitados sin confirmar | Mensaje informativo, termina sin error |
-| Teléfono con formato inesperado | Advertencia en consola, invitado omitido |
+| Situación                       | Comportamiento                                    |
+| ------------------------------- | ------------------------------------------------- |
+| Variables de entorno faltantes  | Error descriptivo al arranque, el script no corre |
+| Fallo de conexión a Supabase    | Error con mensaje claro (no stacktrace crudo)     |
+| Sin invitados sin confirmar     | Mensaje informativo, termina sin error            |
+| Teléfono con formato inesperado | Advertencia en consola, invitado omitido          |
 
 Sin `try/catch` genéricos que oculten errores.
 
