@@ -55,7 +55,7 @@ src/
 index.ts                  → Entry point: carga .env, corre el caso de uso, escribe el MD
 ```
 
-**Principio clave:** la lógica de dominio no importa ni Supabase ni sistema de archivos.
++**Principio clave:** la lógica de dominio no importa ni Supabase ni el sistema de archivos.
 Las dependencias apuntan hacia adentro: `index.ts → application → domain ← infrastructure`.
 
 Sin testing automatizado (YAGNI — proyecto de evento único).
