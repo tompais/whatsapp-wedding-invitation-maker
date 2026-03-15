@@ -6,8 +6,8 @@
   "scripts": {
     "generate": "ts-node index.ts",
     "start": "ts-node index.ts",
-    "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint --fix \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" \"index.ts\"",
+    "lint:fix": "eslint --fix \"src/**/*.ts\" \"index.ts\"",
     "format": "prettier --write \"**/*.{ts,js,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
     "prepare": "husky"
