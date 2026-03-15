@@ -104,3 +104,15 @@ Cada cierta cantidad de sesiones, revisar:
 - [ ] ¿Hay skills nuevas que aplicar? → `/skill-creator`
 - [ ] ¿Hay automaciones de Claude Code por configurar? → `/claude-automation-recommender`
 - [ ] ¿CLAUDE.md refleja el estado actual del proyecto? → actualizarlo
+
+## Claude Code Automations
+
+Automatizaciones configuradas en `.claude/` (rastreadas en git — aplican a cualquiera que abra el proyecto en Claude Code):
+
+| Tipo                    | Trigger                          | Qué hace                                              |
+| ----------------------- | -------------------------------- | ----------------------------------------------------- |
+| PostToolUse hook        | Edit o Write de `.ts`            | Corre `npm run lint` automáticamente                  |
+| PreToolUse hook         | Edit o Write de `.env`           | Bloquea la edición (permite `.env.example`)           |
+| Skill `/run-smoke-test` | Usuario invoca `/run-smoke-test` | Corre `npm run generate` y muestra preview del output |
+
+GitHub MCP (`claude mcp add github`) — instalación global del usuario, no está en el repo. Permite gestionar PRs y reviews desde Claude Code sin abrir el browser.
