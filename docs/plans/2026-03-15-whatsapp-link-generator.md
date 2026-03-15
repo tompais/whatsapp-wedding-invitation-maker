@@ -22,6 +22,7 @@ git checkout -b feature/whatsapp-link-generator
 ## Task 1: Project configuration
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `tsconfig.json`
 - Create: `.env.example`
@@ -114,6 +115,7 @@ git commit -m "chore: configure TypeScript project with dependencies"
 ## Task 2: Domain types
 
 **Files:**
+
 - Create: `src/domain/types.ts`
 
 **Step 1: Create src/domain/types.ts**
@@ -189,6 +191,7 @@ git commit -m "feat: add domain types (GuestWithGroup, WhatsAppLink, InvitationO
 ## Task 3: Message template
 
 **Files:**
+
 - Create: `src/domain/messageTemplate.ts`
 
 **Step 1: Create src/domain/messageTemplate.ts**
@@ -292,6 +295,7 @@ git commit -m "feat: add WhatsApp message template with group/solo variants"
 ## Task 4: WhatsApp link generator
 
 **Files:**
+
 - Create: `src/domain/whatsappLink.ts`
 
 **Step 1: Create src/domain/whatsappLink.ts**
@@ -321,7 +325,10 @@ const MIN_PHONE_DIGITS = 10;
  * @returns URL completa de WhatsApp Me
  * @throws Error si el número no tiene un formato reconocible
  */
-export function generateWhatsAppLink(rawPhone: string, message: string): string {
+export function generateWhatsAppLink(
+  rawPhone: string,
+  message: string
+): string {
   const normalizedPhone = normalizeArgentinePhone(rawPhone);
   const encodedMessage = encodeURIComponent(message);
   return `https://wa.me/${normalizedPhone}?text=${encodedMessage}`;
@@ -376,6 +383,7 @@ git commit -m "feat: add WhatsApp Me link generator with Argentine phone normali
 ## Task 5: Supabase infrastructure
 
 **Files:**
+
 - Create: `src/infrastructure/supabaseClient.ts`
 - Create: `src/infrastructure/guestRepository.ts`
 
@@ -485,10 +493,13 @@ interface RawGuestRow {
  * @returns Lista de invitados enriquecidos con info de grupo, listos para el dominio
  * @throws Error si la query a Supabase falla
  */
-export async function findUnconfirmedGuestsWithPhone(): Promise<GuestWithGroup[]> {
+export async function findUnconfirmedGuestsWithPhone(): Promise<
+  GuestWithGroup[]
+> {
   const { data, error } = await supabase
     .from("guests")
-    .select(`
+    .select(
+      `
       id,
       first_name,
       last_name,
@@ -503,11 +514,14 @@ export async function findUnconfirmedGuestsWithPhone(): Promise<GuestWithGroup[]
         )
       ),
       confirmations (id)
-    `)
+    `
+    )
     .not("phone", "is", null);
 
   if (error) {
-    throw new Error(`❌ Error al consultar invitados en Supabase: ${error.message}`);
+    throw new Error(
+      `❌ Error al consultar invitados en Supabase: ${error.message}`
+    );
   }
 
   if (!data || data.length === 0) {
@@ -565,6 +579,7 @@ git commit -m "feat: add Supabase client singleton and guest repository"
 ## Task 6: Application use case
 
 **Files:**
+
 - Create: `src/application/generateLinks.ts`
 
 **Step 1: Create src/application/generateLinks.ts**
@@ -586,7 +601,11 @@ git commit -m "feat: add Supabase client singleton and guest repository"
 import { findUnconfirmedGuestsWithPhone } from "../infrastructure/guestRepository";
 import { buildMessage } from "../domain/messageTemplate";
 import { generateWhatsAppLink } from "../domain/whatsappLink";
-import type { GuestWithGroup, InvitationOutput, WhatsAppLink } from "../domain/types";
+import type {
+  GuestWithGroup,
+  InvitationOutput,
+  WhatsAppLink,
+} from "../domain/types";
 
 /**
  * Ejecuta el caso de uso completo y retorna la estructura lista para renderizar.
@@ -620,7 +639,9 @@ export async function generateInvitationLinks(): Promise<InvitationOutput> {
   }
 
   // Separar: con grupo vs. sin grupo (solo incluir los que tienen link generado)
-  const withGroup = guests.filter((g) => g.groupName !== undefined && links.has(g.id));
+  const withGroup = guests.filter(
+    (g) => g.groupName !== undefined && links.has(g.id)
+  );
   const solo = guests
     .filter((g) => g.groupName === undefined && links.has(g.id))
     .sort(byLastName);
@@ -657,7 +678,9 @@ function buildGroupMap(
   }
 
   // Ordenar el Map por nombre de grupo (alfabético)
-  return new Map([...map.entries()].sort(([a], [b]) => a.localeCompare(b, "es-AR")));
+  return new Map(
+    [...map.entries()].sort(([a], [b]) => a.localeCompare(b, "es-AR"))
+  );
 }
 
 /**
@@ -680,6 +703,7 @@ git commit -m "feat: add generateInvitationLinks use case with group sorting"
 ## Task 7: Entry point
 
 **Files:**
+
 - Create: `index.ts`
 
 **Step 1: Create index.ts**
@@ -726,7 +750,9 @@ async function main(): Promise<void> {
   const { groups, solo, links } = await generateInvitationLinks();
 
   if (links.size === 0) {
-    console.log("✅ No hay nada que generar. ¡Todos confirmaron o nadie tiene teléfono!");
+    console.log(
+      "✅ No hay nada que generar. ¡Todos confirmaron o nadie tiene teléfono!"
+    );
     return;
   }
 
@@ -850,13 +876,14 @@ git commit -m "feat: add entry point with Markdown rendering and file output"
 ## Task 8: Documentación
 
 **Files:**
+
 - Modify: `README.md`
 - Create: `docs/ARCHITECTURE.md`
 - Modify: `CLAUDE.md`
 
 **Step 1: Reemplazar README.md**
 
-```markdown
+````markdown
 # 💍 WhatsApp Wedding Invitation Maker
 
 Generador de links de invitación WhatsApp para la boda de **Angie & Tomi** (Julio 2026).
@@ -884,6 +911,7 @@ cp .env.example .env
 # → Completar .env con las credenciales de Supabase
 #   (Supabase Dashboard → Project Settings → API)
 ```
+````
 
 ## Uso
 
@@ -915,7 +943,8 @@ para ver la lista y hacer clic en los links directamente.
 - [Arquitectura del proyecto](docs/ARCHITECTURE.md)
 - [Documento de diseño](docs/plans/2026-03-15-whatsapp-generator-design.md)
 - [Plan de implementación](docs/plans/2026-03-15-whatsapp-link-generator.md)
-```
+
+````
 
 **Step 2: Create docs/ARCHITECTURE.md**
 
@@ -928,15 +957,17 @@ Script de Node.js + TypeScript con arquitectura en capas liviana.
 Las dependencias apuntan siempre hacia adentro: la lógica de dominio
 no conoce ni Supabase ni el filesystem.
 
-```
-index.ts  (entry point: carga .env, escribe el archivo Markdown)
-    └── src/application/generateLinks.ts  (caso de uso: orquesta todo)
-            ├── src/infrastructure/guestRepository.ts  (query a Supabase)
-            │       └── src/infrastructure/supabaseClient.ts  (singleton)
-            └── src/domain/  (lógica pura, sin dependencias externas)
-                    ├── types.ts           (interfaces y tipos centrales)
-                    ├── messageTemplate.ts (construye el texto del mensaje)
-                    └── whatsappLink.ts    (genera la URL wa.me/...)
+````
+
+index.ts (entry point: carga .env, escribe el archivo Markdown)
+└── src/application/generateLinks.ts (caso de uso: orquesta todo)
+├── src/infrastructure/guestRepository.ts (query a Supabase)
+│ └── src/infrastructure/supabaseClient.ts (singleton)
+└── src/domain/ (lógica pura, sin dependencias externas)
+├── types.ts (interfaces y tipos centrales)
+├── messageTemplate.ts (construye el texto del mensaje)
+└── whatsappLink.ts (genera la URL wa.me/...)
+
 ```
 
 ## Capas
@@ -972,7 +1003,7 @@ Carga `.env` (primer import, crítico), ejecuta el caso de uso, renderiza Markdo
 
 **Step 3: Reemplazar CLAUDE.md**
 
-```markdown
+````markdown
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -993,6 +1024,7 @@ con links `wa.me` personalizados.
 npm install       # Instalar dependencias
 npm run generate  # Ejecutar el script → genera output/invitations-YYYY-MM-DD.md
 ```
+````
 
 ## Architecture
 
@@ -1017,6 +1049,7 @@ src/domain/                       → Lógica pura: types, messageTemplate, what
 ## Documentation Workflow
 
 En cada PR que cambie arquitectura, comportamiento o convenciones:
+
 1. Actualizar `README.md` si cambia el uso o setup
 2. Actualizar `docs/ARCHITECTURE.md` si cambia la estructura de capas
 3. Crear `docs/plans/YYYY-MM-DD-<feature>.md` para cada nuevo diseño aprobado
@@ -1026,19 +1059,20 @@ En cada PR que cambie arquitectura, comportamiento o convenciones:
 
 Sin pushes directos a `master`. Siempre rama + PR.
 
-| Prefijo rama | Cuándo usarlo |
-|---|---|
-| `feature/*` | Nueva funcionalidad |
-| `enhancement/*` | Mejoras a funcionalidad existente |
-| `chore/*` | Config, deps, CI |
-| `wording/*` | Solo cambios de texto/copy |
-| `refactor/*` | Reestructuración sin cambio de comportamiento |
-| `fix/*` | Bug fix |
-| `hotfix/*` | Fix urgente en producción |
+| Prefijo rama    | Cuándo usarlo                                 |
+| --------------- | --------------------------------------------- |
+| `feature/*`     | Nueva funcionalidad                           |
+| `enhancement/*` | Mejoras a funcionalidad existente             |
+| `chore/*`       | Config, deps, CI                              |
+| `wording/*`     | Solo cambios de texto/copy                    |
+| `refactor/*`    | Reestructuración sin cambio de comportamiento |
+| `fix/*`         | Bug fix                                       |
+| `hotfix/*`      | Fix urgente en producción                     |
 
 PR titles: `[FTR]`, `[ENH]`, `[CHR]`, `[WRD]`, `[RFT]`, `[FIX]`, `[HOTFIX]`
 
 Commits atómicos:
+
 ```
 feat|enhance|fix|refactor|chore|docs|wording: descripción imperativa en español
 
@@ -1057,25 +1091,27 @@ Copiar `.env.example` a `.env` y completar con las credenciales del Supabase Das
 
 ## Collaboration
 
-| Rol | Herramienta | Responsabilidades |
-|---|---|---|
-| Builder | Claude Code | Features, refactors, arquitectura, documentación |
+| Rol      | Herramienta    | Responsabilidades                                                   |
+| -------- | -------------- | ------------------------------------------------------------------- |
+| Builder  | Claude Code    | Features, refactors, arquitectura, documentación                    |
 | Reviewer | GitHub Copilot | Code reviews en PRs; debe respetar los principios de este CLAUDE.md |
 
 ## Periodic Maintenance
 
 Cada cierta cantidad de sesiones, revisar:
+
 - [ ] ¿Hay skills nuevas que aplicar? → `/skill-creator`
 - [ ] ¿Hay automaciones de Claude Code por configurar? → `/claude-automation-recommender`
 - [ ] ¿CLAUDE.md refleja el estado actual del proyecto? → actualizarlo
-```
+
+````
 
 **Step 4: Commit**
 
 ```bash
 git add README.md docs/ARCHITECTURE.md CLAUDE.md
 git commit -m "docs: add README, ARCHITECTURE, and update CLAUDE.md with full project context"
-```
+````
 
 ---
 
@@ -1095,6 +1131,7 @@ npm run generate
 ```
 
 Output esperado:
+
 ```
 💍 Generador de invitaciones WhatsApp — Boda Angie & Tomi
 
@@ -1105,6 +1142,7 @@ Output esperado:
 **Step 3: Verificar el output manualmente**
 
 Abrir `output/invitations-2026-03-15.md` y verificar:
+
 - [ ] Tiene encabezado con fecha y total
 - [ ] Los grupos familiares aparecen ordenados alfabéticamente
 - [ ] Dentro de cada grupo, los invitados están ordenados por apellido
@@ -1145,6 +1183,7 @@ EOF
 
 > Este PR apunta a `chore/project-setup-and-design`. Una vez mergeado ese PR a `master`,
 > actualizar el base de este PR a `master` con:
+>
 > ```bash
 > gh pr edit <número> --base master
 > ```
