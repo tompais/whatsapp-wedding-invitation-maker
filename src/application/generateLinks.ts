@@ -46,7 +46,7 @@ export async function generateInvitationLinks(): Promise<InvitationOutput> {
       });
     } catch (error) {
       console.warn(
-        `⚠️  Omitiendo a ${guest.firstName} ${guest.lastName}: ${(error as Error).message}`
+        `⚠️  Omitiendo a ${guest.firstName} ${guest.lastName}: ${error instanceof Error ? error.message : String(error)}`
       );
     }
   }
