@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,subprocess; d=json.load(sys.stdin); fp=d.get('file_path',''); r=subprocess.run(['npm','run','lint'],cwd='/Users/tom.pais/WebstormProjects/whatsapp-wedding-invitation-maker',capture_output=True,text=True) if fp.endswith('.ts') else None; out=(r.stdout+r.stderr).strip() if r else ''; lines=out.split('\\n'); print('\\n'.join(lines[-8:])) if out else None; sys.exit(r.returncode if r else 0)\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys; d=json.load(sys.stdin); fp=d.get('file_path',''); blocked='.env' in fp and '.env.example' not in fp; print('BLOQUEADO: no editar .env directamente. Usá .env.example.') if blocked else None; sys.exit(2 if blocked else 0)\""
+          }
+        ]
+      }
+    ]
+  }
+}
