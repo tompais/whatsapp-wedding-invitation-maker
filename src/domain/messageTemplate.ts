@@ -35,6 +35,7 @@ export function buildMessage(guest: GuestWithGroup): string {
     buildIntro(guest.firstName),
     buildCTA(guest.code),
     buildGroupSection(guest),
+    buildEditNote(),
     buildClosing(guest.groupMembers.length > 0),
   ];
 
@@ -59,7 +60,7 @@ function buildIntro(firstName: string): string {
 function buildCTA(code: string): string {
   return (
     `Para confirmar, entrá a 👉 *${WEDDING_URL}* e ingresá tu código personal:\n` +
-    `🔑 *${code}*\n` +
+    `🔑 *${code}*\n\n` +
     CONFIRMATION_DEADLINE_REMINDER
   );
 }
@@ -79,6 +80,14 @@ function buildGroupSection(guest: GuestWithGroup): string {
   }
 
   return `_Tu invitación es personal y exclusiva — ¡fue pensada especialmente para vos! 🥰_`;
+}
+
+/**
+ * Nota de edición: recuerda al invitado que puede actualizar su confirmación
+ * volviendo a ingresar su código en la web.
+ */
+function buildEditNote(): string {
+  return `_¿Necesitás cambiar tu respuesta? Podés hacerlo cuando quieras volviendo a la web e ingresando tu código nuevamente._ 😊`;
 }
 
 /**
