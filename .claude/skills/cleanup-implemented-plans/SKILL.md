@@ -4,7 +4,7 @@ description: Corre el flujo de limpieza de archivos docs/plans/ que ya fueron im
 disable-model-invocation: true
 ---
 
-Run the following steps in the project root `/Users/tom.pais/WebstormProjects/whatsapp-wedding-invitation-maker`:
+Run the following steps in the project root `<project_root>`:
 
 1. List all files currently in `docs/plans/` and show them to the user.
 2. For each file, confirm it corresponds to a feature already merged to `master` (check git log if unsure).
