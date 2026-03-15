@@ -4,29 +4,103 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Node.js tool for generating WhatsApp wedding invitation messages. Currently in early setup — no source files exist yet.
+Script de Node.js + TypeScript que genera links de invitación WhatsApp para la boda de
+**Angie & Tomi (Julio 2026)**. Se conecta a la misma base de datos Supabase que usa la
+web de invitación, obtiene invitados sin confirmar con teléfono, y genera un Markdown
+con links `wa.me` personalizados.
 
-## Package Configuration
-
-- **Module system:** CommonJS (`"type": "commonjs"`) — use `require()`/`module.exports`, not ESM `import`/`export`
-- **Entry point:** `index.js` (to be created)
+- Web de la boda: [www.labodadeangieytomi.com](https://www.labodadeangieytomi.com)
+- Repo de la UI: [wedding-invitation-ui](https://github.com/tompais/wedding-invitation-ui)
 
 ## Commands
 
 ```bash
-# Install dependencies (once added)
-npm install
-
-# Run the tool
-node index.js
-
-# Run tests (once a test framework is configured)
-npm test
+npm install           # Instalar dependencias
+npm run generate      # Ejecutar el script → genera output/invitations-YYYY-MM-DD.md
+npm run lint          # Verificar código con ESLint
+npm run lint:fix      # Corregir errores ESLint automáticamente
+npm run format        # Formatear con Prettier
+npm run format:check  # Verificar formato sin modificar
 ```
 
-## Architecture Notes
+**Antes de declarar cualquier tarea completa:** correr `npm run lint && npm run format:check` — deben pasar con 0 errores y 0 warnings.
 
-No source code exists yet. When building this out, document:
-- How invitation templates are structured
-- How recipient data is loaded (CSV, JSON, manual input, etc.)
-- How WhatsApp sending is triggered (WhatsApp Web API, Baileys, whatsapp-web.js, etc.)
+## Architecture
+
+Arquitectura en capas liviana. Detalles en [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+```
+index.ts                          → Entry point (carga .env, renderiza y escribe Markdown)
+src/application/generateLinks.ts  → Caso de uso (orquesta todo)
+src/infrastructure/               → Supabase singleton + guest repository
+src/domain/                       → Lógica pura: types, messageTemplate, whatsappLink
+```
+
+## Code Quality Principles
+
+- **SOLID, DRY, KISS, YAGNI, Clean Code, Clean Architecture** en cada cambio
+- **Null safety**: preferir `undefined` sobre `null`, `strictNullChecks` activo, valores por defecto explícitos
+- **Enums** para valores/estados finitos en lugar de strings literales dispersos
+- **JSDoc** en todas las funciones públicas y módulos — incluir `@param`, `@returns`, `@throws`
+- **Comentarios** que explican el _por qué_, no el _qué_ (el código ya muestra el qué)
+- **0 errores y 0 warnings** en ESLint y Prettier — incluyendo warnings del IDE (WebStorm) y SonarQube
+- **Sin tests** — decisión explícita (YAGNI, evento único)
+
+## Documentation Workflow
+
+En cada PR que cambie arquitectura, comportamiento o convenciones:
+
+1. Actualizar `README.md` si cambia el uso o setup
+2. Actualizar `docs/ARCHITECTURE.md` si cambia la estructura de capas
+3. Crear `docs/plans/YYYY-MM-DD-<feature>.md` para cada nuevo diseño aprobado
+4. Diagramas (si aportan valor) en `diagrams/` como `.mmd` (Mermaid) o `.puml` (PlantUML)
+5. Todo el código debe estar bien comentado — JSDoc en funciones públicas, comentarios inline donde la lógica no sea evidente
+
+## Git & Branch Workflow
+
+Sin pushes directos a `master`. Siempre rama + PR.
+
+| Prefijo rama    | Cuándo usarlo                                 |
+| --------------- | --------------------------------------------- |
+| `feature/*`     | Nueva funcionalidad                           |
+| `enhancement/*` | Mejoras a funcionalidad existente             |
+| `chore/*`       | Config, deps, CI                              |
+| `wording/*`     | Solo cambios de texto/copy                    |
+| `refactor/*`    | Reestructuración sin cambio de comportamiento |
+| `fix/*`         | Bug fix                                       |
+| `hotfix/*`      | Fix urgente en producción                     |
+
+PR titles: `[FTR]`, `[ENH]`, `[CHR]`, `[WRD]`, `[RFT]`, `[FIX]`, `[HOTFIX]`
+
+Commits atómicos:
+
+```
+feat|enhance|fix|refactor|chore|docs|wording: descripción imperativa en español
+
+[cuerpo opcional: explica el POR QUÉ, no el qué — el diff ya muestra el qué]
+```
+
+## Environment
+
+```env
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+Sin prefijo `NEXT_PUBLIC_` — este es Node.js puro, no Next.js.
+Copiar `.env.example` a `.env` y completar con las credenciales del Supabase Dashboard → API.
+
+## Collaboration
+
+| Rol      | Herramienta    | Responsabilidades                                                   |
+| -------- | -------------- | ------------------------------------------------------------------- |
+| Builder  | Claude Code    | Features, refactors, arquitectura, documentación                    |
+| Reviewer | GitHub Copilot | Code reviews en PRs; debe respetar los principios de este CLAUDE.md |
+
+## Periodic Maintenance
+
+Cada cierta cantidad de sesiones, revisar:
+
+- [ ] ¿Hay skills nuevas que aplicar? → `/skill-creator`
+- [ ] ¿Hay automaciones de Claude Code por configurar? → `/claude-automation-recommender`
+- [ ] ¿CLAUDE.md refleja el estado actual del proyecto? → actualizarlo
